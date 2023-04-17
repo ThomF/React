@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import NameTag from "../components/NameTag";
 
 export default function HomePage() {
   const [count, setCount] = useState(0)
@@ -17,6 +18,10 @@ export default function HomePage() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div>
+        <NameTag />
       </div>
     </div>
   )
