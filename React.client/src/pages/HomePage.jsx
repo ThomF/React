@@ -1,22 +1,37 @@
-import React, { useState } from "react";
+import { observer } from "mobx-react";
+import React, { useEffect } from "react";
+import { AppState } from "../AppState";
+import CarCard from "../components/CarCard";
 import NameTag from "../components/NameTag";
+import { Cars } from "../models/Cars.js";
+import { carsService } from "../services/CarsService";
+import Pop from "../utils/Pop";
 
-export default function HomePage() {
-  const [count, setCount] = useState(0)
 
+function HomePage() {
+  async function getCars(){
+    try {
+      await carsService.getCars()
+    } catch (error){
+      Pop.error(error);
+    }
+  }
+
+  let cars = (AppState.cars.map(c => {
+    return (
+      <div className="col-md-4" key={c.id}>
+        <CarCard car={c} />
+      </div>
+    )
+  }))
+  useEffect(()=>{
+    getCars()
+  }, [])
   return (
     <div className="home-page">
       <div className="container my-3">
         <div className="row">
-          <div className="col-4">
-            <div className="card">
-              <div className="card-body">
-                <button className="btn btn-success my-1" onClick={() => setCount((count) => count + 1)}>
-                  count is {count}
-                </button>
-              </div>
-            </div>
-          </div>
+          {cars}
         </div>
       </div>
 
@@ -26,3 +41,4 @@ export default function HomePage() {
     </div>
   )
 }
+export default observer(HomePage)
